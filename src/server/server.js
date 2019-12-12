@@ -13,6 +13,9 @@ app.use(
     })
 );
 app.use(bodyParser.json());
+app.use((req, res) => {
+    res.header('Access-Control-Allow-Origin', '*')
+})
     
 const db = require('../../config/keys').mongodbURI
     

@@ -1,46 +1,116 @@
 import React from 'react'
 import { Form, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
+import classnames from "classnames";
 import FadeIn from 'react-fade-in'
 
-export default function Signup() {
-    return(
-        <Form style={{ maxWidth: '400px', margin: '100px auto' }}>
-            <FadeIn>
-            <h1>Thanks for Joining Us!</h1>
-            <br />
-            <h3>Sign Up</h3>
-            <Form.Group>
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="name" placeholder="Enter Name" />
-            </Form.Group>
-            <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter Email" />
-                <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                </Form.Text>
-            </Form.Group>
+class Signup extends React.Component {
+    constructor() {
+        super()
+        this.state = {
+            name: '',
+            email: '',
+            password: '',
+            password2: '',
+            errors: {}
+        }
+    }
 
-            <Form.Group controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
-            </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password2" placeholder="Confirm Password" />
-            </Form.Group>
-            <Form.Group>
-                <Button block variant="primary" type="submit">
-                    Sign Up
-                </Button>
-            </Form.Group>
-            <Form.Group>
-                <Form.Text>
-                    <Link to='/login'>Already a User? Please Sign In Here.</Link>
-                </Form.Text>
-            </Form.Group>
-            </FadeIn>
-        </Form>
-    )
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.errors) {
+            this.setState({
+            errors: nextProps.errors
+            })
+        }
+    }
+
+    onChange = e => {
+        this.setState({ [e.target.name]: e.target.value })
+    }
+
+    onSubmit = e => {
+        e.preventDefault()
+
+        const newUser = {
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password,
+            password2: this.state.password2
+        }
+        this.props.registerUser(newUser, this.props.history)
+        console.log(newUser)
+    }
+
+    render() {
+        const { errors } = this.state
+        console.log(errors)
+        return(
+            <Form onSubmit={this.onSubmit} style={{ maxWidth: '400px', margin: '100px auto' }}>
+                <FadeIn>
+                <h1>Thanks for Joining Us!</h1>
+                <br />
+                <h3>Sign Up</h3>
+                <Form.Group>
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control name='name' onChange={this.onChange} value={this.state.name} isInvalid={errors.name} type="name" placeholder="Enter Name" />
+                    <Form.Text>
+                        {errors.name}
+                    </Form.Text>
+                </Form.Group>
+                <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control name='email' onChange={this.onChange} value={this.state.email} isInvalid={errors.email} type="email" placeholder="Enter Email" />
+                    <Form.Text className="text-muted">
+                        We'll never share your email with anyone else.
+                        {errors.email}
+                    </Form.Text>
+                </Form.Group>
+
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control name='password' onChange={this.onChange} value={this.state.password} isInvalid={errors.password} type="password" placeholder="Password" />
+                    <Form.Text>
+                        {errors.password}
+                    </Form.Text>
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control name='password2' onChange={this.onChange} value={this.state.password2} isInvalid={errors.password2} type="password2" placeholder="Confirm Password" />
+                    <Form.Text>
+                        {errors.password2}
+                    </Form.Text>
+                </Form.Group>
+                <Form.Group>
+                    <Button block variant="primary" type="submit">
+                        Sign Up
+                    </Button>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Text>
+                        <Link to='/login'>Already a User? Please Sign In Here.</Link>
+                    </Form.Text>
+                </Form.Group>
+                </FadeIn>
+            </Form>
+        )
+    }
 }
+
+Signup.propTypes = {
+    registerUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+});
+
+export default connect(
+    mapStateToProps,
+    { registerUser }
+  )(withRouter(Signup));
