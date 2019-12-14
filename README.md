@@ -33,7 +33,7 @@ The authentication is using **jwt token authentication** and is using [**passpor
 
 ## Interesting Notes
 
-Becuse Redux does not run natively in browsers or mobile devices the `compose()` functoin within store has been modified with `composeWithDevTools()` so the redux browser extension is not neccessary to run this. Just be aware if you start to create another redux application from scratch that it will need this replacement or the [**redux-devtools-extension** npm packacge](https://www.npmjs.com/package/redux-devtools-extension)
+Becuse Redux does not run natively in browsers or mobile devices the `compose()` functoin within store has been modified with `composeWithDevTools()` so the redux browser extension is not neccessary to run this. Just be aware if you start to create another redux application from scratch that it will need this replacement or the [**redux-devtools-extension** npm package](https://www.npmjs.com/package/redux-devtools-extension)
 
 
 This tempalte was made with ❤ by Patrick Kennedy | [Portfolio Website](https://pkennedytx1.com)
