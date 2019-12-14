@@ -4,7 +4,6 @@ import { Link, withRouter } from 'react-router-dom'
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
-import classnames from "classnames";
 import FadeIn from 'react-fade-in'
 
 class Signup extends React.Component {
@@ -19,7 +18,8 @@ class Signup extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    // need to update to getDerivedStateFromProps
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.errors) {
             this.setState({
             errors: nextProps.errors
@@ -41,12 +41,11 @@ class Signup extends React.Component {
             password2: this.state.password2
         }
         this.props.registerUser(newUser, this.props.history)
-        console.log(newUser)
     }
 
     render() {
         const { errors } = this.state
-        console.log(errors)
+        
         return(
             <Form onSubmit={this.onSubmit} style={{ maxWidth: '400px', margin: '100px auto' }}>
                 <FadeIn>
@@ -56,32 +55,37 @@ class Signup extends React.Component {
                 <Form.Group>
                     <Form.Label>Name</Form.Label>
                     <Form.Control name='name' onChange={this.onChange} value={this.state.name} isInvalid={errors.name} type="name" placeholder="Enter Name" />
-                    <Form.Text>
+                    <Form.Control.Feedback type='invalid'>
                         {errors.name}
-                    </Form.Text>
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control name='email' onChange={this.onChange} value={this.state.email} isInvalid={errors.email} type="email" placeholder="Enter Email" />
-                    <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
-                        {errors.email}
-                    </Form.Text>
+                    {errors.email ? 
+                        <Form.Control.Feedback type='invalid'>
+                            {errors.email}
+                        </Form.Control.Feedback>
+                    :
+                        <Form.Text className="text-muted">
+                            We'll never share your email with anyone else. <span aria-labelledby='celebration emoji' role='img'>🥳</span>
+                        </Form.Text>
+                    }
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
                     <Form.Control name='password' onChange={this.onChange} value={this.state.password} isInvalid={errors.password} type="password" placeholder="Password" />
-                    <Form.Text>
+                    <Form.Control.Feedback type='invalid'>
                         {errors.password}
-                    </Form.Text>
+                    </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control name='password2' onChange={this.onChange} value={this.state.password2} isInvalid={errors.password2} type="password2" placeholder="Confirm Password" />
-                    <Form.Text>
+                <Form.Group controlId="formBasicPassword2">
+                    <Form.Label> Confirm Password</Form.Label>
+                    <Form.Control name='password2' onChange={this.onChange} value={this.state.password2} isInvalid={errors.password2} type="password" placeholder="Confirm Password" />
+                    <Form.Control.Feedback type='invalid'>
                         {errors.password2}
-                    </Form.Text>
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group>
                     <Button block variant="primary" type="submit">
