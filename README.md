@@ -1,4 +1,4 @@
-# MERN-template
+# MERN + Redux Login Template
 
 ## Getting Started
 
@@ -29,7 +29,11 @@ NOTE: This template is good for using a rails server as well. You will just have
 If you change the server where the backend is running you must change the `proxy: http://localhost:3001` to whatever your backend endpoint is running on.
 You can find all the routes to the backend in the *src/client/src/actions/authActions.js** file.
 
+The authentication is using **jwt token authentication** and is using [**passport**](http://www.passportjs.org/) and [**is-empty**](https://www.npmjs.com/package/is-empty) to handle validations and authentication. 
 
+## Interesting Notes
+
+Becuse Redux does not run natively in browsers or mobile devices the `compose()` functoin within store has been modified with `composeWithDevTools()` so the redux browser extension is not neccessary to run this. Just be aware if you start to create another redux application from scratch that it will need this replacement or the [**redux-devtools-extension** npm packacge](https://www.npmjs.com/package/redux-devtools-extension)
 
 
 This tempalte was made with ❤ by Patrick Kennedy | [Portfolio Website](https://pkennedytx1.com)
