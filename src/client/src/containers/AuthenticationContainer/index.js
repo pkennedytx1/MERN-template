@@ -1,43 +1,41 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { setCurrentUser, logoutUser } from "../../actions/authActions"
+import { Provider } from 'react-redux' 
+import jwt_decode from "jwt-decode"
+import setAuthToken from "../../utils/setAuthToken"
+import store from "../../store"
+
+// Imported Components
 import Login from '../../components/Login'
 import Signup from '../../components/Signup'
-import jwt_decode from "jwt-decode";
-import setAuthToken from "../../utils/setAuthToken";
-import { setCurrentUser, logoutUser } from "../../actions/authActions";
-import store from "../../store";
+import PrivateRoute from '../../components/PrivateRoute'
+import Home from '../../components/Home'
 
-// Check for token to keep user logged in
+// Checking for jt token with some security checks.
 if (localStorage.jwtToken) {
-    // Set auth token header auth
-    const token = localStorage.jwtToken;
-    setAuthToken(token);
-    // Decode token and get user info and exp
-    const decoded = jwt_decode(token);
-    // Set user and isAuthenticated
-    store.dispatch(setCurrentUser(decoded));
-    // Check for expired token
-    const currentTime = Date.now() / 1000; // to get in milliseconds
+    const token = localStorage.jwtToken
+    setAuthToken(token)
+    const decoded = jwt_decode(token)
+    store.dispatch(setCurrentUser(decoded))
+    const currentTime = Date.now() / 1000
+
     if (decoded.exp < currentTime) {
-      // Logout user
-      store.dispatch(logoutUser());
-  
-      // Redirect to login
-      window.location.href = "./login";
+      store.dispatch(logoutUser())
+      window.location.href = "./login"
     }
 }
 
 export default function AuthenticationContainer() {
     return(
-        <Router>
-            <Switch>
-                <Route exact path='/login'>
-                    <Login />
-                </Route>
-                <Route exact path='/signup'>
-                    <Signup />
-                </Route>
-            </Switch>
-        </Router>
+        <Provider store={store}>
+            <Router>
+                <Route exact path='/login' component={Login} />
+                <Route exact path='/signup' component={Signup} />
+                <Switch>
+                    <PrivateRoute  exact path='/home' component={Home} />
+                </Switch>
+            </Router>
+        </Provider>
     )
 }
