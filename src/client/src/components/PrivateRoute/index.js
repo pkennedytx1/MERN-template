@@ -2,8 +2,11 @@ import React from "react"
 import { Route, Redirect } from "react-router-dom"
 import { connect } from "react-redux"
 import PropTypes from "prop-types"
+import Navagation from '../Navagation'
 
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (
+  <div>
+  <Navagation />
   <Route
     {...rest}
     render={props =>
@@ -11,6 +14,7 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
       ( <Component {...props} /> ) : ( <Redirect to="/login" /> )
     }
   />
+  </div>
 )
 
 PrivateRoute.propTypes = {
