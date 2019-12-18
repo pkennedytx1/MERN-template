@@ -5,6 +5,8 @@ import { Provider } from 'react-redux'
 import jwt_decode from "jwt-decode"
 import setAuthToken from "../../utils/setAuthToken"
 import store from "../../store"
+import Page1 from '../../components/Page1'
+import Page2 from '../../components/Page2'
 
 // Imported Components
 import Login from '../../components/Login'
@@ -33,7 +35,9 @@ export default function AuthenticationContainer() {
                 <Route exact path='/login' component={Login} />
                 <Route exact path='/signup' component={Signup} />
                 <Switch>
-                    <PrivateRoute  exact path='/home' component={Home} />
+                    <PrivateRoute exact path='/home' component={Home} />
+                    <PrivateRoute exact path='/page1' component={Page1} />
+                    <PrivateRoute exact path='/page2' component={Page2} />
                 </Switch>
             </Router>
         </Provider>
